@@ -26,7 +26,7 @@ jobs:
           submodules: true
           lfs: false
 
-      # Step 2: Use Node.js 20
+      # Step 2: Setup Node.js 20
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
@@ -61,11 +61,11 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_MUSHROOM_073420510 }}
           action: "upload"
-          app_location: "/"                     # Root of your repo
-          output_location: "build"              # Folder created by Vite build
-          skip_app_build: true                  # Use the locally built app
+          app_location: "/"              # Root of your repo
+          output_location: "build"       # Folder created by Vite build
+          skip_app_build: true           # Use prebuilt files; don't let Oryx rebuild
           github_id_token: ${{ steps.idtoken.outputs.result }}
-          routes_location: "./routes.json"      # ✅ Correct path for routes.json file
+          # ❌ Don't include routes_location; Azure auto-detects routes.json
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
