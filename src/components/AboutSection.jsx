@@ -10,11 +10,11 @@ export default function AboutSection() {
           transition={{ duration: 0.6 }}
           className="text-4xl font-bold mb-8 text-white"
         >
-          About <span className="text-purple-400">Dreamz Synapsis ’25</span>
+          About <span className="text-purple-400">Dreamz Nexus ’25</span>
         </motion.h2>
 
         <p className="text-lg leading-relaxed text-gray-400">
-          Dreamz Synapsis is more than an event — it’s a celebration of innovation, creativity, and unity
+          Dreamz Nexus is more than an event — it’s a celebration of innovation, creativity, and unity
           in the dental community. Through science, culture, and collaboration, it inspires the next
           generation of thinkers and creators.
         </p>

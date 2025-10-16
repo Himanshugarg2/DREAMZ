@@ -17,7 +17,7 @@ export default function HeroSection() {
         className="text-6xl font-extrabold mb-4"
       >
         Get <span className="text-purple-400">READY</span> for <br /> DREAMZ:{" "}
-        <span className="neon-text">SYNAPSIS ’25!</span>
+        <span className="neon-text">Nexus ’25!</span>
       </motion.h1>
 
       <p className="text-gray-300 text-lg max-w-2xl mb-6">

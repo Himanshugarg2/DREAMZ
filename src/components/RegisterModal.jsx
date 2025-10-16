@@ -19,7 +19,7 @@ export default function RegisterModal({ isOpen, onClose }) {
             transition={{ duration: 0.3 }}
           >
             <h2 className="text-3xl font-bold text-center mb-6 text-purple-400">
-              Register for Dreamz Synapsis ‘25
+              Register for Dreamz Nexus ‘25
             </h2>
 
             <form className="space-y-4">
