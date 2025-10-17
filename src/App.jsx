@@ -10,7 +10,6 @@ import EventsSection from "./components/EventsSection";
 import SponsorsSection from "./components/SponsorsSection";
 import QuoteSection from "./components/QuoteSection";
 import ContactSection from "./components/ContactSection";
-import DownloadBrochureSection from "./components/DownloadBrochureSection";
 import Footer from "./components/Footer";
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
       <SponsorsSection />
       <QuoteSection />
       <ContactSection />
-      <DownloadBrochureSection />
       <Footer />
     </div>
       
