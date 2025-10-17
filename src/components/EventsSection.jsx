@@ -83,22 +83,40 @@ export default function EventsSection() {
       </motion.div>
 
       {/* Timeline line */}
-      <div className="absolute left-1/2 top-40 bottom-12 w-[3px] bg-gradient-to-b from-purple-500 via-pink-500 to-indigo-500 hidden md:block shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
+      <div className="absolute left-1/2 top-52 bottom-12 w-[3px] bg-gradient-to-b from-purple-500 via-pink-500 to-indigo-500 hidden md:block shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
 
       {/* Timeline Events */}
       <div className="flex flex-col space-y-16 relative max-w-6xl mx-auto px-6">
         {events.map((event, i) => {
           const Icon = event.icon;
+          const isLeft = i % 2 === 0;
+          
           return (
             <motion.div
               key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -100 : 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: i * 0.2 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.03, y: -5 }}
-              className={`relative md:w-[48%] group ${
-                i % 2 === 0 ? "self-start md:mr-auto" : "self-end md:ml-auto"
+              initial={{ 
+                opacity: 0, 
+                y: 50,
+                scale: 0.9,
+              }}
+              whileInView={{ 
+                opacity: 1, 
+                y: 0,
+                scale: 1,
+              }}
+              transition={{ 
+                duration: 0.6,
+                type: "spring",
+                stiffness: 100,
+                damping: 15,
+              }}
+              viewport={{ once: false, amount: 0.3 }}
+              whileHover={{ 
+                scale: 1.02, 
+                y: -5,
+              }}
+              className={`relative w-full md:w-[48%] group ${
+                isLeft ? "md:self-start md:mr-auto" : "md:self-end md:ml-auto"
               }`}
             >
               {/* Connector dot with pulse animation */}
