@@ -1,9 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import RegisterModal from "./RegisterModal";
 
 export default function HeroSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Countdown to Dec 16, 2025 (local time)
+  const targetDate = new Date(2025, 11, 16, 0, 0, 0);
+  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(targetDate));
+
+  function calculateTimeLeft(target) {
+    const now = new Date();
+    const diff = target.getTime() - now.getTime();
+    if (diff <= 0) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0, finished: true };
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    return { days, hours, minutes, seconds, finished: false };
+  }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft(targetDate));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const pad = (n) => String(n).padStart(2, "0");
 
   return (
     <section
@@ -24,15 +50,28 @@ export default function HeroSection() {
         A Celebration of Talent, Teamwork, and Discovery — Where Creativity Meets Science.
       </p>
 
-      <div className="flex gap-4 text-xl mb-6">
-        {["55 Days", "07 Hours", "56 Minutes"].map((item, i) => (
-          <div
-            key={i}
-            className="bg-white/10 px-6 py-3 rounded-xl backdrop-blur-md border border-white/20"
-          >
-            {item}
+      {/* Live countdown */}
+      <div className="flex gap-4 text-xl mb-6" aria-live="polite">
+        {timeLeft.finished ? (
+          <div className="bg-white/10 px-6 py-3 rounded-xl backdrop-blur-md border border-white/20 text-purple-300 font-semibold">
+            The celebration begins today!
           </div>
-        ))}
+        ) : (
+          <>
+            <div className="bg-white/10 px-6 py-3 rounded-xl backdrop-blur-md border border-white/20">
+              <span className="font-bold">{pad(timeLeft.days)}</span> Days
+            </div>
+            <div className="bg-white/10 px-6 py-3 rounded-xl backdrop-blur-md border border-white/20">
+              <span className="font-bold">{pad(timeLeft.hours)}</span> Hours
+            </div>
+            <div className="bg-white/10 px-6 py-3 rounded-xl backdrop-blur-md border border-white/20">
+              <span className="font-bold">{pad(timeLeft.minutes)}</span> Minutes
+            </div>
+            <div className="bg-white/10 px-6 py-3 rounded-xl backdrop-blur-md border border-white/20">
+              <span className="font-bold">{pad(timeLeft.seconds)}</span> Seconds
+            </div>
+          </>
+        )}
       </div>
 
       <button
