@@ -9,7 +9,6 @@ export default function HeroSection() {
   const [initialDays, setInitialDays] = useState(1);
   const [liveDay, setLiveDay] = useState(null);
 
-  // Detect live event day
   useEffect(() => {
     const now = new Date();
     if (now.getMonth() === 11) {
@@ -41,7 +40,6 @@ export default function HeroSection() {
     }
   }, []);
 
-  // Countdown
   useEffect(() => {
     const timer = setInterval(() => setTimeLeft(calculateTimeLeft(targetDate)), 1000);
     return () => clearInterval(timer);
@@ -76,44 +74,48 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-screen flex flex-col items-center justify-center text-white text-center px-4 pt-24 overflow-hidden"
+      className="relative w-full min-h-screen flex flex-col md:flex-row items-center justify-center text-white overflow-hidden"
     >
-      {/* 🔮 Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-70"
-        style={{
-          backgroundImage: "url('/logo_Image.png')", // ✅ ensure path correct
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "blur(2px) brightness(0.6)",
-        }}
-      ></div>
+      {/* ✨ Smooth background blend */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-purple-950/70 to-black opacity-90"></div>
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-purple-950/60 to-black/90"></div>
+      {/* 🌌 Glowing transition overlay between logo and content */}
+      <div className="absolute inset-y-0 left-1/2 w-1/3 bg-gradient-to-r from-purple-600/20 via-pink-500/10 to-transparent blur-3xl opacity-60 transition-all duration-1000 ease-in-out"></div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center">
-        {/* Title */}
+      {/* 🔮 Left: Logo */}
+      <div className="relative z-10 w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
+        <motion.img
+          src="/logo_Image.png"
+          alt="Dreamz Nexus Logo"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.3, ease: "easeInOut" }}
+          className="max-w-[380px] md:max-w-[480px] w-full h-auto drop-shadow-[0_0_45px_rgba(236,72,153,0.6)]"
+        />
+      </div>
+
+      {/* 🔥 Right: Content */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }}
+        className="relative z-10 w-full md:w-1/2 text-center md:text-left px-6 md:px-12 flex flex-col items-center md:items-start justify-center space-y-6 py-10"
+      >
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-6xl font-extrabold mb-4"
+          transition={{ duration: 1, delay: 0.3 }}
+          className="text-5xl md:text-6xl font-extrabold leading-tight"
         >
           Get <span className="text-purple-400">READY</span> for <br /> DREAMZ:{" "}
           <span className="neon-text">Nexus ’25!</span>
         </motion.h1>
 
-        <p className="text-gray-300 text-lg max-w-2xl mb-6">
+        <p className="text-gray-300 text-lg md:text-xl max-w-xl">
           A Celebration of Talent, Teamwork, and Discovery — Where Creativity Meets Science.
         </p>
 
-        {/* Countdown or Live Banner */}
-        <div
-          className="w-full max-w-3xl grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
-          aria-live="polite"
-        >
+        <div className="w-full max-w-lg grid grid-cols-2 md:grid-cols-4 gap-4" aria-live="polite">
           {timeLeft.finished || liveDay ? (
             <div
               className={`col-span-2 md:col-span-4 bg-gradient-to-r ${
@@ -151,23 +153,22 @@ export default function HeroSection() {
           )}
         </div>
 
-        {/* Register Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold hover:scale-105 transition-transform"
+          className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-semibold hover:scale-105 transition-transform mt-4 shadow-[0_0_20px_rgba(236,72,153,0.4)]"
         >
           Register Now
         </button>
-      </div>
+      </motion.div>
 
       <RegisterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 }
 
-// Countdown Ring (unchanged)
+// Countdown Ring component unchanged
 function CountdownRing({ label, value, max, colorFrom, colorTo, pad = true, pulse = false }) {
-  const size = 110;
+  const size = 100;
   const stroke = 10;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
@@ -212,7 +213,7 @@ function CountdownRing({ label, value, max, colorFrom, colorTo, pad = true, puls
           initial={{ opacity: 0, y: 6, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.25 }}
-          className="absolute inset-0 flex items-center justify-center text-2xl font-extrabold tracking-wide"
+          className="absolute inset-0 flex items-center justify-center text-xl font-extrabold tracking-wide"
         >
           {display}
         </motion.div>
@@ -224,11 +225,10 @@ function CountdownRing({ label, value, max, colorFrom, colorTo, pad = true, puls
           initial={{ opacity: 0.35, scale: 0.9 }}
           animate={{ opacity: 0, scale: 1.2 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
-          className="absolute w-[85px] h-[85px] rounded-full border-2"
+          className="absolute w-[80px] h-[80px] rounded-full border-2"
           style={{ borderColor: `${colorTo}44` }}
         />
       )}
     </div>
   );
 }
-
