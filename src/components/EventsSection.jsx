@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, MapPin, Sparkles, Microscope, Music, Trophy } from "lucide-react";
 
@@ -178,12 +178,29 @@ export default function EventsSection() {
     { key: "final", label: "Final Day", icon: Trophy },
   ];
 
-  // Date per day
+  // Map tab to date label
   const dayDates = {
     scientific: "Dec 16, 2025",
     cultural: "Dec 17, 2025",
     final: "Dec 18, 2025",
   };
+
+  // Determine if today is live (Dec 16/17/18)
+  const [liveTab, setLiveTab] = useState(null);
+  const isLive = Boolean(liveTab);
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    const now = new Date();
+    if (now.getMonth() === 11) { // December (0-indexed)
+      const d = now.getDate();
+      if (d === 16) setLiveTab("scientific");
+      else if (d === 17) setLiveTab("cultural");
+      else if (d === 18) setLiveTab("final");
+    }
+  }, []);
+
+  
 
   return (
     <section
@@ -225,7 +242,7 @@ export default function EventsSection() {
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex justify-center gap-4 mb-12 flex-wrap">
+      <div className="flex justify-center gap-4 mb-6 flex-wrap">
         {tabs.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
@@ -237,16 +254,47 @@ export default function EventsSection() {
             }`}
           >
             <Icon size={18} />
+            {key === liveTab && (
+              <span className="relative flex h-2.5 w-2.5 mr-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-pink-500"></span>
+              </span>
+            )}
             {label}
           </button>
         ))}
       </div>
 
+      {/* Live banner */}
+      {isLive && (
+        <div className="flex justify-center mb-8 px-4">
+          <div className="bg-gradient-to-r from-purple-600/25 to-pink-600/25 border border-white/10 rounded-2xl px-4 py-3 flex items-center gap-3 backdrop-blur-md">
+            <span className="inline-flex items-center gap-2 text-white">
+              <span className="relative flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-70"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-pink-500"></span>
+              </span>
+              Event is live — {dayDates[liveTab]}
+            </span>
+            <button
+              onClick={() => {
+                if (liveTab) setActiveTab(liveTab);
+                const el = cardsRef.current;
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className="ml-2 px-3 py-1.5 text-sm rounded-lg bg-white/10 hover:bg-white/20 border border-white/10"
+            >
+              See today's activities
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Timeline Line */}
       <div className="absolute left-1/2 top-80 bottom-12 w-[3px] bg-gradient-to-b from-purple-500 via-pink-500 to-indigo-500 hidden md:block shadow-[0_0_20px_rgba(168,85,247,0.6)]"></div>
 
-      {/* Event Cards */}
-      <div className="relative max-w-6xl mx-auto px-6">
+  {/* Event Cards */}
+  <div ref={cardsRef} className="relative max-w-6xl mx-auto px-6">
         <AnimatePresence mode="wait">
           {eventsData[activeTab] && (
             <motion.div
